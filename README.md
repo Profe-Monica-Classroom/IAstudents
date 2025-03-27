@@ -33,6 +33,13 @@ El proyecto final implementa un sistema completo de IA que incluye:
 3. Optimización de hiperparámetros.
 4. Análisis de resultados.
 
+Este proyecto se basa en la vision por computadora, para detectar determinados gestos con las manos y traducirlos a lenguaje de señas Venezolano. Todas las predicciones del modelo se realian mediante un modelo de redes convolucionales. 
+
+El DataFrame usado a lo largo del curso es el siguiente: 
+
+Imagenes: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
+Dato CSV: https://www.kaggle.com/datasets/datamunge/sign-language-mnist
+
 ## 👥 Contribuidores
 
 - Estudiante 1 - @GuiKe1104 (Guillermo Cardenas)
