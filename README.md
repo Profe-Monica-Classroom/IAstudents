@@ -38,7 +38,8 @@ Este proyecto se basa en la vision por computadora, para detectar determinados g
 El DataFrame usado a lo largo del curso es el siguiente: 
 
 Imagenes: https://www.kaggle.com/datasets/grassknoted/asl-alphabet
-Dato CSV: https://www.kaggle.com/datasets/datamunge/sign-language-mnist
+
+Datos CSV: https://www.kaggle.com/datasets/datamunge/sign-language-mnist
 
 ## 👥 Contribuidores
 
