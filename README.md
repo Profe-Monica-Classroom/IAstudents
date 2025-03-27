@@ -1,6 +1,6 @@
 # Inteligencia Artificial - Grupo 7 - 2024-2
 
-(https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.pngtree.com%2Ffreebackground%2Fblue-technology-light-artificial-intelligence-cool-banner-background-material_968735.html&psig=AOvVaw2w3OwTB1-DQFlx46QS01Ry&ust=1743132399351000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMjdpKyoqYwDFQAAAAAdAAAAABAE)
+!(https://www.google.com/url?sa=i&url=https%3A%2F%2Fes.pngtree.com%2Ffreebackground%2Fblue-technology-light-artificial-intelligence-cool-banner-background-material_968735.html&psig=AOvVaw2w3OwTB1-DQFlx46QS01Ry&ust=1743132399351000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCMjdpKyoqYwDFQAAAAAdAAAAABAE)
 
 Repositorio que contiene los trabajos realizados durante el curso de Inteligencia Artificial 2024-2 por el Grupo 7 de Ingeniería Mecatrónica.
 
