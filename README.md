@@ -2,7 +2,7 @@
 
 ![image](https://github.com/user-attachments/assets/75328264-9f23-4310-82f6-1eb482d3afc2)
 
-## Universidad Nacional Experimental Politecnica "Antonio Jose de Sucre"- Gureanas 
+## Universidad Nacional Experimental Politecnica "Antonio Jose de Sucre"- Guarenas 
 
 ![image](https://github.com/user-attachments/assets/2d9d6316-b518-45b0-97e9-dfc62c755ac2)
 
