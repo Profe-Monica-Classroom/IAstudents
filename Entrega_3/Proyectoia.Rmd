@@ -1,0 +1,244 @@
+---
+title: "Entrenamiento de Red Neuronal con Keras"
+author: "Guillermo Cardenas, Juan Suarez"
+date: "`r Sys.Date()`"
+output:
+  word_document: default
+  html_document: default
+---
+
+# Introducción
+
+Este reporte muestra el uso de **R** para entrenar un modelo de red neuronal utilizando los paquetes `Keras` y `TensorFlow`.
+
+# Configuración Inicial
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Instalación de Paquetes
+
+```{r}
+
+if (!requireNamespace("tensorflow", quietly = TRUE)) install.packages("tensorflow")
+if (!requireNamespace("keras", quietly = TRUE)) install.packages("keras")
+library(keras)
+library(tensorflow)
+library(ggplot2)
+library(gridExtra)
+library(png)
+
+```
+
+# Configuración inicial del dataset
+
+```{r}
+
+dataset_path <- "C:/Users/aasal/OneDrive/Documentos/Curso Samsung/.venv/IA uni/Alfabeto/dateset400"
+epochs <- as.integer(10)
+batch_size <- as.integer(32)
+target_size <- c(32, 32)
+classes <- c("A", "B", "C", "D", "E", "F", "G", "H", "I", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y")
+
+```
+
+#Preprocesamiento de Datos
+
+```{r data-preprocessing}
+train_datagen <- image_data_generator(
+  rescale = 1 / 255,  
+  rotation_range = 20,
+  width_shift_range = 0.2,
+  height_shift_range = 0.2,
+  horizontal_flip = TRUE,
+  validation_split = 0.2
+)
+
+train_generator <- flow_images_from_directory(
+  directory = dataset_path,
+  generator = train_datagen,
+  target_size = target_size,
+  color_mode = "grayscale",
+  batch_size = batch_size,
+  class_mode = "categorical",
+  classes = classes,
+  subset = "training",
+  seed = 123
+)
+
+validation_generator <- flow_images_from_directory(
+  directory = dataset_path,
+  generator = train_datagen,
+  target_size = target_size,
+  color_mode = "grayscale",
+  batch_size = batch_size,
+  class_mode = "categorical",
+  classes = classes,
+  subset = "validation",
+  seed = 123
+)
+```
+
+# Definición del Modelo CNN
+
+```{r}
+# Definición de la arquitectura
+inputs <- layer_input(shape = c(32, 32, 1))
+
+outputs <- inputs %>%
+  
+  layer_conv_2d(filters = 64, kernel_size = c(3,3), activation = "relu", padding = "same") %>%
+  layer_conv_2d(filters = 64, kernel_size = c(3,3), activation = "relu", padding = "same") %>%
+  layer_batch_normalization() %>%
+  layer_max_pooling_2d(pool_size = c(2,2)) %>%
+  layer_dropout(rate = 0.25) %>%
+  
+  layer_conv_2d(filters = 128, kernel_size = c(3,3), activation = "relu", padding = "same") %>%
+  layer_conv_2d(filters = 128, kernel_size = c(3,3), activation = "relu", padding = "same") %>%
+  layer_batch_normalization() %>%
+  layer_max_pooling_2d(pool_size = c(2,2)) %>%
+  layer_dropout(rate = 0.25) %>%
+  
+  layer_flatten() %>%
+  layer_dense(units = 256, activation = "relu") %>%
+  layer_dense(units = 64, activation = "relu") %>%
+  layer_dropout(rate = 0.3) %>%
+  layer_dense(units = 24, activation = "softmax")
+
+model <- keras_model(inputs = inputs, outputs = outputs)
+```
+
+# Compilacion del modelo
+
+```{r}
+
+# Resumen del modelo
+summary(model)
+```
+
+# Callbacks necesarios para salvar
+
+```{r}
+# Callbacks
+checkpoint_dir <- "C:/Users/aasal/OneDrive/Documentos/Curso Samsung/.venv/IA uni/Alfabeto/save"
+if (!dir.exists(checkpoint_dir)) {
+  dir.create(checkpoint_dir, recursive = TRUE)
+}
+
+checkpoint_callback <- callback_model_checkpoint(
+  filepath = file.path(checkpoint_dir, "weights-{epoch:02d}-{val_accuracy:.2f}.h5"),  # Cambiado a .h5
+  monitor = "val_accuracy",
+  save_best_only = TRUE,
+  mode = "max",
+  verbose = 1
+)
+
+early_stop <- callback_early_stopping(
+  monitor = "val_loss",
+  patience = 5,
+  restore_best_weights = TRUE
+)
+```
+
+#Entrenamiento del modelo
+
+````{r}
+
+
+````
+
+#Evaluar y salvar el modelo
+
+```{r}
+# 6. Guardar el modelo
+save_model_hdf5(model, "modelo_cajas.h5")
+(str(generator_next(train_generator)))
+```
+
+# Graficas:
+
+# Grafica de arreglo de la red:
+
+````{r}
+# Función para visualizar la arquitectura del modelo
+plot_model_architecture <- function() {
+  # Capas representadas en el gráfico
+  layers <- c(
+    "Input (32x32x1)",
+    "Conv2D (64 filtros, ReLU, padding=same)",
+    "Conv2D (64 filtros, ReLU, padding=same)",
+    "BatchNorm",
+    "MaxPooling2D",
+    "Dropout (rate=0.25)",
+    "Conv2D (128 filtros, ReLU, padding=same)",
+    "Conv2D (128 filtros, ReLU, padding=same)",
+    "BatchNorm",
+    "MaxPooling2D",
+    "Dropout (rate=0.25)",
+    "Flatten",
+    "Dense (256 unidades, ReLU)",
+    "Dense (64 unidades, ReLU)",
+    "Dropout (rate=0.3)",
+    "Dense (24 unidades, Softmax)"
+  )
+  
+  # Crear un data frame para las posiciones de las capas
+  df <- data.frame(
+    x = rep(1, length(layers)),  # Mantener las capas en una columna
+    y = seq(length(layers), 1),  # Asegurar que los layers fluyan de arriba hacia abajo
+    label = layers
+  )
+  
+  # Generar el gráfico utilizando ggplot2
+  ggplot(df, aes(x, y, label = label)) +
+    geom_point(size = 10, color = "steelblue") +  # Puntos azules que representan las capas
+    geom_text(color = "black", size = 3, fontface = "bold", vjust = -0.6) +  # Texto en negro
+    geom_segment(aes(x = x, xend = x, y = y + 0.6, yend = y - 0.6),  # Flechas de arriba hacia abajo
+                 arrow = arrow(length = unit(0.2, "cm")), 
+                 color = "red") +  # Flechas amarillas
+    theme_void() +
+    labs(title = "Arquitectura de la Red Neuronal") +
+    theme(plot.title = element_text(hjust = 0.5, size = 16, face = "bold"))
+}
+
+# Llamar a la función para visualizar el gráfico
+plot_model_architecture()
+
+
+````
+
+
+# Grafica de imagenes de ejemplo:
+
+````{r}
+# Visualizar algunas imágenes de ejemplo
+plot_sample_images <- function(generator, n = 6) {
+  batch <- generator_next(generator)
+  images <- batch[[1]]
+  labels <- batch[[2]]
+  
+  # Configurar área de gráfico
+  par(mfrow = c(2, 3), mar = c(1, 1, 2, 1))
+  
+  for (i in 1:n) {
+    # Extraer y normalizar la imagen (convertir a rango [0,1])
+    img <- images[i,,,1]
+    img_norm <- (img - min(img)) / (max(img) - min(img))
+    
+    # Crear plot con funciones base de R
+    plot(NA, xlim = c(0, 1), ylim = c(0, 1), xaxt = 'n', yaxt = 'n', ann = FALSE)
+    rasterImage(img_norm, 0, 0, 1, 1)
+    title(main = ifelse(labels[i] == 1, classes[2], classes[1]), line = 0.5)
+    box()
+  }
+}
+
+# Mostrar todas las visualizaciones
+plot_model_architecture()
+plot_sample_images(train_generator)
+
+
+````
