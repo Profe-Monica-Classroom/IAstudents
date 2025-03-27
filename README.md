@@ -17,7 +17,7 @@ Repositorio que contiene los trabajos realizados durante el curso de Inteligenci
 
 ## 🚀 Tecnologías Utilizadas
 
-- Python 3.9+.
+- Python 3.12.6
 - Scikit-learn.
 - TensorFlow/Keras.
 - NLTK.
